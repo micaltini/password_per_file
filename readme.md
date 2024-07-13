@@ -1,8 +1,7 @@
 # Password Per File
 
 ## Project
-- Scrivi qui cosa fa il progetto
+- This is a project to manage passwords for files and direcrtories
 
 ## Technologies
 - Python
-- altro...
