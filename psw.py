@@ -1,7 +1,11 @@
+import tkinter as tk 
+from tkinter import filedialog, simpledialog, messagebox
 import sqlite3  # Gestione del database SQLite
 import base64  # Codifica base64
 import hashlib  # Generazione dell'hash SHA-256
 from cryptography.fernet import Fernet  # Cifratura e decifratura dei dati
+import os
+
 
 # Creazione del database e della tabella
 
@@ -142,3 +146,53 @@ cancella_riga(nome_file_test)
 
 verifica_inserimento(nome_file_test)
 '''
+
+
+
+
+
+
+
+
+root = tk.Tk()
+root.title("Protezione File e Cartelle") # Creata interfaccia grafica
+
+frame = tk.Frame(root)
+frame.pack(pady=20, padx=20) # Creato il frame principale
+
+# Funzione per aprire un file o una cartella
+def apri_file_o_cartella(nome_file):
+    if os.path.isfile(nome_file):
+        os.startfile(nome_file)
+    elif os.path.isdir(nome_file):
+        os.startfile(nome_file)
+    else:
+        messagebox.showerror("Errore", "File o cartella non trovato.")
+
+# Funzione per controllare la password di un file o una cartella
+def controlla_password(nome_file):
+    cursor.execute('SELECT password_cifrata FROM file_protetti WHERE nome_file = ?', (nome_file,))
+    result = cursor.fetchone()
+    if result:
+        password_cifrata = result[0]
+        password = simpledialog.askstring("Password richiesta", f"Inserisci la password per accedere a {nome_file}:", show='*')
+        try:
+            password_decifrata = decrypt_data(password_cifrata, password)
+            if password_decifrata == password:
+                print(f"Accesso consentito a {nome_file}.")
+                apri_file_o_cartella(nome_file)
+            else:
+                messagebox.showerror("Errore", "Password errata.")
+        except Exception as e:
+            messagebox.showerror("Errore", f"Errore nella decifratura: {e}")
+    else:
+        print(f"Nessuna password impostata per {nome_file}. Apertura consentita.")
+        apri_file_o_cartella(nome_file)
+
+
+
+
+
+
+
+
