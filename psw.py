@@ -147,20 +147,41 @@ cancella_riga(nome_file_test)
 verifica_inserimento(nome_file_test)
 '''
 
+# Funzione che permette di impostare una password dall'interfaccia grafica
+
+def imposta_password_gui(nome_file):
+    password = simpledialog.askstring("Imposta Password", f"Inserisci una password per {nome_file}:", show='*')
+    if password:
+        imposta_password(nome_file, password)
+        messagebox.showinfo("Successo", f"Password impostata per {nome_file}.")
+    else:
+        messagebox.showwarning("Attenzione", "Nessuna password inserita.")
+
+
+
+# Funzione che permette di selezionare un file o una cartella a cui impostare una password
+
+def seleziona_file_o_cartella():
+    nome_file = filedialog.askopenfilename() or filedialog.askdirectory()
+    if nome_file:
+        imposta_password_gui(nome_file)
 
 
 
 
-
-
+# Creazione interfaccia grafica
 
 root = tk.Tk()
 root.title("Protezione File e Cartelle") # Creata interfaccia grafica
+root.geometry('300x150')
 
-frame = tk.Frame(root)
-frame.pack(pady=20, padx=20) # Creato il frame principale
+btn_seleziona = tk.Button(root, text="Seleziona File o Cartella", command=seleziona_file_o_cartella)
+btn_seleziona.pack(pady=20)
+
+root.mainloop()
 
 # Funzione per aprire un file o una cartella
+
 def apri_file_o_cartella(nome_file):
     if os.path.isfile(nome_file):
         os.startfile(nome_file)
@@ -170,6 +191,7 @@ def apri_file_o_cartella(nome_file):
         messagebox.showerror("Errore", "File o cartella non trovato.")
 
 # Funzione per controllare la password di un file o una cartella
+
 def controlla_password(nome_file):
     cursor.execute('SELECT password_cifrata FROM file_protetti WHERE nome_file = ?', (nome_file,))
     result = cursor.fetchone()
@@ -188,11 +210,4 @@ def controlla_password(nome_file):
     else:
         print(f"Nessuna password impostata per {nome_file}. Apertura consentita.")
         apri_file_o_cartella(nome_file)
-
-
-
-
-
-
-
 
