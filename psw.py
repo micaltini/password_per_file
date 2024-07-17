@@ -167,19 +167,6 @@ def seleziona_file_o_cartella():
         imposta_password_gui(nome_file)
 
 
-
-
-# Creazione interfaccia grafica
-
-root = tk.Tk()
-root.title("Protezione File e Cartelle") # Creata interfaccia grafica
-root.geometry('300x150')
-
-btn_seleziona = tk.Button(root, text="Seleziona File o Cartella", command=seleziona_file_o_cartella)
-btn_seleziona.pack(pady=20)
-
-root.mainloop()
-
 # Funzione per aprire un file o una cartella
 
 def apri_file_o_cartella(nome_file):
@@ -211,3 +198,31 @@ def controlla_password(nome_file):
         print(f"Nessuna password impostata per {nome_file}. Apertura consentita.")
         apri_file_o_cartella(nome_file)
 
+
+
+# Funzione per selezionare un file o una cartella e controllare la password
+
+def seleziona_e_apri_file_o_cartella():
+    nome_file = filedialog.askopenfilename() or filedialog.askdirectory()
+    if nome_file:
+        controlla_password(nome_file)
+
+
+
+
+
+
+
+# Creazione interfaccia grafica
+
+root = tk.Tk()
+root.title("Protezione File e Cartelle") # Creata interfaccia grafica
+root.geometry('300x150')
+
+btn_seleziona = tk.Button(root, text="Seleziona File o Cartella", command=seleziona_file_o_cartella)
+btn_seleziona.pack(pady=20)
+
+btn_apri = tk.Button(root, text="Apri File o Cartella", command=seleziona_e_apri_file_o_cartella)
+btn_apri.pack(pady=10)
+
+root.mainloop()
